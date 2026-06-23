@@ -1,17 +1,30 @@
-#!name=Spotify(iOS15)
+Tên: Spotify (iOS15)
 
-#!desc=部分解锁premium,建议重新登录,音质不能设置为超高
+Mô tả:
+Mở khóa một phần Premium.
+Khuyến nghị đăng xuất rồi đăng nhập lại.
+Không nên đặt chất lượng âm thanh ở mức "Rất cao" (Very High).
 
-# 1. 搜索界面 歌单/歌曲可以随意切换完全播放  2. 音乐库已点赞歌曲随意切换完全播放
+1. Trong giao diện tìm kiếm:
+   - Playlist và bài hát có thể chuyển đổi, phát đầy đủ tự do.
+
+2. Trong Thư viện:
+   - Các bài hát đã thích (Liked Songs) có thể phát đầy đủ tự do.
 
 [Header Rewrite]
 ^https?://api.revenuecat.com/.+/(receipts$|subscribers/?(.*?)*$) header-del x-revenuecat-etag
 ^https?://api.revenuecat.com/.+/(receipts$|subscribers/?(.*?)*$) header-del X-RevenueCat-ETag
 
+
 #SpotifyPremium
 #hostname = spclient.wg.spotify.com
-spotify-json = type=http-request,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/,requires-body=0,script-path=https://raw.githubusercontent.com/duyvinh09/Module_IOS/refs/heads/main/js/spotify-json.js
-spotify-proto = type=http-response,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/duyvinh09/Module_IOS/refs/heads/main/js/spotify-proto.js,script-update-interval=0
+spotify-json = type=http-request,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/,requires-body=0,script-path=https://raw.githubusercontent.com/quanthaihong1/tesst-/refs/heads/main/Spoti/spotify-json.js
+spotify-proto = type=http-response,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js,script-update-interval=86400
 #************************************#
 
-[MITM] hostname = %APPEND%, *spclient.wg.spotify.com
+#iTunes
+#hostname = buy.itunes.apple.com
+iTunes = type=http-response, pattern=^https?:\/\/buy\.itunes\.apple\.com\/verifyReceipt$, script-path=https://raw.githubusercontent.com/chxm1023/Rewrite/main/iTunes.js, requires-body=true, max-size=-1, timeout=60
+#************************************#
+
+[MITM] hostname = %APPEND% spclient.wg.spotify.com, *spclient.spotify.com
